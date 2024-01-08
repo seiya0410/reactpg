@@ -5,7 +5,7 @@ const getusers = async() => {
   const response = await fetch('https://select.seiyalife.xyz');
   const body = response.json();
   return body;
-  console.log(body);
+  //console.log(body);
 }
 
 function App() {
