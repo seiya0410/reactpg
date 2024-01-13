@@ -1,30 +1,12 @@
 import React, { useState } from 'react';
-import BarChart from './graph.js'; // Assuming BarChart is in the same directory
 
-function DateForm() {
+function DateForm({ onDateChange }) {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
-  const [chartData, setChartData] = useState(null); // 新しいstate変数
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    fetch('https://select.seiyalife.xyz', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ fromDate, toDate }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      setChartData(data); // レスポンスデータをchartDataにセット
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      setChartData(null); // エラー発生時はchartDataをnullに
-    });
+    onDateChange(fromDate, toDate);
   };
 
   return (
@@ -48,9 +30,6 @@ function DateForm() {
 
         <button type="submit">送信</button>
       </form>
-
-      {/* BarChart コンポーネントを条件付きでレンダリング */}
-      {chartData && <BarChart data={chartData} />}
     </div>
   );
 }
