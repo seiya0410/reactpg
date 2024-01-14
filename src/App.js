@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import DateForm from './DateForm'; // DateForm コンポーネントのインポート
 import BarChart from './graph'
+import LineChart from './LineChart';
 
 function App() {
-  const [chartData, setChartData] = useState(null);
+  //const [chartData, setChartData] = useState(null);
+
+  const [ clientIPData, setClientIPData ] = useState(null);
+  const [edgeResponseStatusData, setEdgeResponseStatusData] = useState(null);
+
   const handleDataChange = (fromDate, toDate) => {
     fetch('https://select.seiyalife.xyz', {
       method: 'POST',
@@ -17,21 +22,23 @@ function App() {
       if (Array.isArray(data) && data.length > 0 ){
        // Set the result of the first element in the array to setChartData
       if (data[0].results){
-        setChartData(data[0].results);
+        setClientIPData(data[0].results);
       }
-
-      if (data.length > 1) {
+      if (data.length > 1 && data[1].results) {
+        setEdgeResponseStatusData(data[1].results);
         console.log(data[1].results);
       }   
-    }
-      else {
+    } else {
       // Handle cases where data is not an array or is empty
       console.log("Data is not an array or is empty");
-      setChartData(null);
+        setClientIPData(null);
+        setEdgeResponseStatusData(null);
     }
     })
     .catch(error => {
-      setChartData(null);
+      console.error("Error fetching data:", error);
+      setClientIPData(null);
+      setEdgeResponseStatusData(null);
     })
   };
 
@@ -39,7 +46,8 @@ function App() {
     <div className="App">
       <h1>日時選択</h1>
       <DateForm onDateChange={handleDataChange} />
-      {chartData && <BarChart data={chartData} />} {/* Render BarChart here */}
+      {clientIPData && <BarChart data={clientIPData} />}
+      {edgeResponseStatusData && <LineChart data={edgeResponseStatusData} />}
     </div>
   );
 }
