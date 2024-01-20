@@ -6,7 +6,9 @@ import 'chartjs-adapter-moment';
 
 const LineChart = ({ data }) => {
   // ステータスコードごとにデータを分類
+
   const dataByStatus = data.reduce((acc, item) => {
+
     const { EdgeResponseStatus, EdgeStartTimestamp, NUM } = item;
     if (!acc[EdgeResponseStatus]) {
       acc[EdgeResponseStatus] = [];
@@ -17,7 +19,7 @@ const LineChart = ({ data }) => {
 
   // 各ステータスコードごとのデータセットを生成
   const datasets = Object.entries(dataByStatus).map(([status, values]) => ({
-    label: `Status ${status}`,
+    label: ` ${status}`,
     data: values,
     fill: false,
     borderColor: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`

@@ -8,6 +8,7 @@ function App() {
 
   const [ clientIPData, setClientIPData ] = useState(null);
   const [edgeResponseStatusData, setEdgeResponseStatusData] = useState(null);
+  const [originReposeTimeData, setOriginReponseTimeData] = useState(null);
 
   const handleDataChange = (fromDate, toDate) => {
     fetch('https://select.seiyalife.xyz', {
@@ -21,13 +22,18 @@ function App() {
     .then(data => {
       if (Array.isArray(data) && data.length > 0 ){
        // Set the result of the first element in the array to setChartData
-      if (data[0].results){
-        setClientIPData(data[0].results);
+       console.log(`data: ${JSON.stringify(data)}`)
+      if (data[0]){
+        setClientIPData(data[0]);
       }
-      if (data.length > 1 && data[1].results) {
-        setEdgeResponseStatusData(data[1].results);
-        console.log(data[1].results);
+      if (data.length > 1 && data[1]) {
+        setEdgeResponseStatusData(data[1]);
+        
       }   
+      if (data.length > 1 && data[2]) {
+        setOriginReponseTimeData(data[2]);
+        console.log(`orign data:${JSON.stringify(data[2].results)}`);
+      }
     } else {
       // Handle cases where data is not an array or is empty
       console.log("Data is not an array or is empty");
@@ -48,6 +54,7 @@ function App() {
       <DateForm onDateChange={handleDataChange} />
       {clientIPData && <BarChart data={clientIPData} />}
       {edgeResponseStatusData && <LineChart data={edgeResponseStatusData} />}
+      {originReposeTimeData && <LineChart data={originReposeTimeData} />}
     </div>
   );
 }
