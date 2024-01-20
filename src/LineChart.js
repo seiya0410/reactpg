@@ -5,15 +5,30 @@ import 'moment';
 import 'chartjs-adapter-moment';
 
 const LineChart = ({ data }) => {
+
+    const modKeys = data.map(item => {
+        const keys = Object.keys(item);
+        const newItem = {};
+
+        newItem[keys[0]] = item[keys[0]]
+
+        if (keys.length > 1) newItem.glabel = item[keys[1]];
+        if (keys.length > 2) newItem.gvalue = item[keys[2]];
+    
+        return newItem;
+
+    })
   // ステータスコードごとにデータを分類
 
-  const dataByStatus = data.reduce((acc, item) => {
+  console.log(`modekey:${JSON.stringify(modKeys)}`)
 
-    const { EdgeResponseStatus, EdgeStartTimestamp, NUM } = item;
-    if (!acc[EdgeResponseStatus]) {
-      acc[EdgeResponseStatus] = [];
+  const dataByStatus = modKeys.reduce((acc, item) => {
+
+    const {EdgeStartTimestamp, glabel, gvalue } = item;
+    if (!acc[glabel]) {
+      acc[glabel] = [];
     }
-    acc[EdgeResponseStatus].push({ x: EdgeStartTimestamp, y: NUM });
+    acc[glabel].push({ x: EdgeStartTimestamp, y: gvalue });
     return acc;
   }, {});
 
